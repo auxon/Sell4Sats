@@ -5,7 +5,6 @@ export function buildPostText(listing) {
     listing.description,
     "",
     `Price: ${listing.priceSats} sats`,
-    `Photo sha256: ${listing.photoSha256}`,
     `Ref: ${listing.id}`,
   ];
   let text = lines.join("\n");

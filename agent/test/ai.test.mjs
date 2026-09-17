@@ -8,7 +8,7 @@ test("ai: offline heuristic produces a usable listing", () => {
   const l = heuristicListing(input);
   assert.equal(l.title, "Vintage Chair");
   assert.ok(l.priceSats >= 1000);
-  assert.ok(l.description.includes("ab".repeat(8)));
+  assert.ok(l.description.includes("Selling for sats on BSV"));
   assert.ok(l.tags.length >= 3);
 });
 

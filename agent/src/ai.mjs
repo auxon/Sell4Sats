@@ -25,10 +25,9 @@ export function heuristicListing(input) {
   const bytes = Math.max(0, Number(input.bytes) || 0);
   const hint = Math.floor(Number(input.priceHintSats) || 0);
   const priceSats = hint > 0 ? hint : Math.max(1000, Math.min(5_000_000, Math.round((bytes / 100) * 1000)));
-  const sha = String(input.sha256 || "").slice(0, 16);
   return {
     title,
-    description: `${title}. Selling for sats on BSV. Photo fingerprint ${sha}${sha ? "…" : ""}.`,
+    description: `${title}. Selling for sats on BSV.`,
     priceSats,
     tags: ["forsale", "bsv", "marketplace"],
   };

@@ -19,6 +19,10 @@ spend goes through bsvOS wallet policy — the agent never touches keys.
               └─ sha256 + local photo store (data/photos/)
 ```
 
+The Twetch post embeds the photo itself as a B:// media output and carries
+its `b://<sha256>` ref in the signed text (plus `mediaRefs` on submit), so
+twetch.com resolves and renders the image inline.
+
 ## Quick start
 
 ```bash
