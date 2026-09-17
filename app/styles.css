@@ -1,0 +1,90 @@
+:root {
+  color-scheme: dark;
+  --bg: #0e1116;
+  --panel: #151a22;
+  --line: #232b36;
+  --ink: #e6e9ee;
+  --dim: #9aa4b2;
+  --accent: #2dd4bf;
+  --warn: #fbbf24;
+  --danger: #f87171;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 18px; border-bottom: 1px solid var(--line);
+  background: rgba(14, 17, 22, 0.92); backdrop-filter: blur(8px);
+}
+.brand { font-weight: 800; letter-spacing: 0.2px; }
+
+main { max-width: 820px; margin: 0 auto; padding: 18px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+h1 { margin: 0 0 4px; font-size: 22px; }
+h2 { margin: 0 0 8px; font-size: 17px; }
+.muted { color: var(--dim); margin-top: 0; }
+.hidden { display: none !important; }
+
+.drop {
+  display: grid; place-items: center; gap: 8px;
+  border: 1.5px dashed var(--line); border-radius: 12px;
+  padding: 22px; cursor: pointer; color: var(--dim);
+  transition: border-color 0.15s ease;
+}
+.drop:hover, .drop.over { border-color: var(--accent); color: var(--ink); }
+.preview { max-height: 220px; max-width: 100%; border-radius: 10px; }
+
+textarea, input[type="number"] {
+  width: 100%; background: var(--bg); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font: inherit;
+}
+textarea { margin-top: 10px; resize: vertical; }
+.row { display: flex; gap: 14px; align-items: flex-end; margin-top: 10px; flex-wrap: wrap; }
+.row.end { justify-content: flex-end; align-items: center; }
+.field { display: grid; gap: 5px; font-size: 13px; color: var(--dim); flex: 1; min-width: 220px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  background: var(--bg); border: 1px solid var(--line); border-radius: 999px;
+  color: var(--dim); padding: 4px 11px; font-size: 13px; cursor: pointer;
+}
+.chip.on { color: #04201c; background: var(--accent); border-color: var(--accent); font-weight: 700; }
+.chip.info { cursor: default; }
+
+button { cursor: pointer; }
+button#sell-btn {
+  background: var(--accent); color: #04201c; border: none; border-radius: 999px;
+  padding: 10px 22px; font-weight: 800; font-size: 15px;
+}
+button#sell-btn:disabled { opacity: 0.5; cursor: default; }
+.ghost {
+  background: transparent; color: var(--dim); border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 14px; font-size: 13px; margin-left: auto;
+}
+.ghost:hover { color: var(--ink); }
+.status { color: var(--dim); font-size: 13px; }
+.status.warn { color: var(--warn); }
+.status.err { color: var(--danger); }
+.status.ok { color: var(--accent); }
+
+.channel-result { display: flex; gap: 10px; align-items: baseline; padding: 3px 0; font-size: 14px; }
+.channel-result b { min-width: 96px; }
+.channel-result a { color: var(--accent); text-decoration: none; }
+.badge { border-radius: 999px; padding: 1px 9px; font-size: 12px; border: 1px solid var(--line); color: var(--dim); }
+.badge.published, .badge.paid { color: #04201c; background: var(--accent); border-color: var(--accent); font-weight: 700; }
+.badge.failed { color: var(--danger); border-color: var(--danger); }
+.badge.waiting { color: var(--warn); border-color: var(--warn); }
+
+.listings { display: grid; gap: 12px; }
+.listing { display: grid; grid-template-columns: 92px 1fr; gap: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+.listing img { width: 92px; height: 92px; object-fit: cover; border-radius: 10px; background: #0a0d12; }
+.listing .meta { color: var(--dim); font-size: 13px; margin: 2px 0 6px; }
+.listing .price { color: var(--accent); font-weight: 700; }
+.listing .actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.listing .actions button {
+  background: var(--bg); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 999px; padding: 4px 12px; font-size: 13px;
+}

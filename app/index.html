@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sell4Sats</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Sell4Sats</div>
+      <div class="chips" id="state-chips"></div>
+      <button id="watch-btn" class="ghost" title="Check payments now">Check payments</button>
+    </header>
+
+    <main>
+      <section class="card compose">
+        <h1>Snap it. Sell it.</h1>
+        <p class="muted">One photo, an AI-written listing, and an agent that sells it for sats across your channels.</p>
+
+        <label id="drop" class="drop">
+          <input id="photo" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+          <img id="preview" class="preview hidden" alt="" />
+          <span id="drop-hint">Drop a photo here or click to choose</span>
+        </label>
+
+        <textarea id="notes" rows="2" placeholder="Anything the AI should know? (condition, size, pickup, etc.)"></textarea>
+
+        <div class="row">
+          <label class="field">
+            Asking price (sats, optional)
+            <input id="price" type="number" min="1" step="1" placeholder="let the AI decide" />
+          </label>
+          <div class="field">
+            Channels
+            <div id="channels" class="chips"></div>
+          </div>
+        </div>
+
+        <div class="row end">
+          <span id="compose-status" class="status"></span>
+          <button id="sell-btn" type="button">Sell it</button>
+        </div>
+      </section>
+
+      <section id="result" class="card hidden"></section>
+      <section id="listings" class="listings"></section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "sell4sats",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Sell4Sats — one photo, an AI listing, and an agent that sells it for sats on bsvOS",
+  "scripts": {
+    "start": "node agent/src/index.mjs",
+    "test": "node --test 'agent/test/**/*.test.mjs'"
+  }
+}

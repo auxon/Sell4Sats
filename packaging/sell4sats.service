@@ -1,0 +1,16 @@
+[Unit]
+Description=Sell4Sats agent (photo -> AI listing -> multi-channel seller)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Sell4Sats
+ExecStart=/usr/bin/env node %h/Sell4Sats/agent/src/index.mjs
+EnvironmentFile=-%h/.config/sell4sats.env
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

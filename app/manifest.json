@@ -1,0 +1,13 @@
+{
+  "name": "Sell4Sats",
+  "short_name": "Sell4Sats",
+  "start_url": "https://127.0.0.2:8790/",
+  "icons": [],
+  "metanet": {
+    "schemaVersion": "1",
+    "groupPermissions": {
+      "description": "Sell4Sats: photo → AI listing → agent publishes it across your selling channels and watches for on-chain payment.",
+      "spendingAuthorization": { "amount": 50000, "description": "listing network fees (Twetch post)" }
+    }
+  }
+}
