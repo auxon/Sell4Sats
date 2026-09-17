@@ -17,7 +17,7 @@ export const twetchChannel = {
   id: "twetch",
   label: "Twetch post (on-chain)",
   async publish(listing, ctx) {
-    const res = await ctx.bsv.twetchPost(buildPostText(listing), "sell4sats");
+    const res = await ctx.bsv.twetchPost(buildPostText(listing), "sell4sats", ctx.photoPath ?? undefined);
     const txid = res.json?.txid;
     if (!res.ok || typeof txid !== "string") {
       return { status: "failed", detail: res.error || res.text?.slice(0, 200) || "no txid" };

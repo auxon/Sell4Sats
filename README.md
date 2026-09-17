@@ -29,10 +29,11 @@ npm start         # agent on https://127.0.0.2:8790
 
 Open `https://127.0.0.2:8790/` (or install it as a bsvOS app below).
 
-First publish will be **denied by wallet policy** — approve a cap once:
+First publish will be **denied by wallet policy** — approve a cap once
+(photos are embedded on-chain, so allow enough for the network fee):
 
 ```bash
-bsv allow sell4sats 50000
+bsv allow sell4sats 500000
 ```
 
 ## Configuration
@@ -100,9 +101,11 @@ never auto-credits.
 
 ## Limits / roadmap
 
-- The Twetch channel posts the listing text plus the photo's sha256; the
-  photo itself is not embedded on-chain yet (next: B:// media output in
-  the listing transaction, like Twetch's own client).
+- The Twetch channel embeds the photo itself: the listing transaction
+  carries Twetch's exact B:// media output (`OP_0 OP_RETURN <B prefix>
+  <bytes> <mime>`) alongside the text post. Photos are downscaled and
+  re-encoded in the app (<= ~180 KB JPEG) so the network fee stays small;
+  approve a cap that covers it (`bsv allow sell4sats 500000`).
 - eBay/Facebook/X adapters are stubs until OAuth credentials exist.
 - No fiat checkout; sales settle in BSV to the wallet address.
 - AI inference is plain API calls; the x402-paid inference path is wired

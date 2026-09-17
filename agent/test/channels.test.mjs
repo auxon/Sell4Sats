@@ -26,10 +26,21 @@ test("channels: twetch post text stays inside the 2000-byte wallet limit", () =>
 });
 
 test("channels: twetch publishes via the wallet and reports failures", async () => {
-  const okCtx = { bsv: { twetchPost: async () => ({ ok: true, json: { txid: "cd".repeat(32), submitted: true } }) } };
+  let seenArgs = null;
+  const okCtx = {
+    bsv: {
+      twetchPost: async (text, origin, mediaPath) => {
+        seenArgs = { text, origin, mediaPath };
+        return { ok: true, json: { txid: "cd".repeat(32), submitted: true } };
+      },
+    },
+    photoPath: "/tmp/photo.jpg",
+  };
   const good = await twetchChannel.publish(listing, okCtx);
   assert.equal(good.status, "published");
   assert.equal(good.url, `https://twetch.com/t/${"cd".repeat(32)}`);
+  assert.equal(seenArgs.origin, "sell4sats");
+  assert.equal(seenArgs.mediaPath, "/tmp/photo.jpg");
 
   const badCtx = { bsv: { twetchPost: async () => ({ ok: false, error: "POLICY_DENY: denied: first-run approval required" }) } };
   const bad = await twetchChannel.publish(listing, badCtx);

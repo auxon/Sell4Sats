@@ -112,6 +112,7 @@ async function publishListing(row, ids, photoBase64) {
     env: process.env,
     fetchFn: fetch,
     photoBase64,
+    photoPath: row.photoFile ? path.join(photoDir, row.photoFile) : undefined,
   });
   const anyPublished = Object.values(results).some((r) => r.status === "published");
   const patch = { channels: { ...(row.channels ?? {}), ...results } };
@@ -119,8 +120,8 @@ async function publishListing(row, ids, photoBase64) {
   const updated = store.updateListing(row.id, patch);
   const existing = store.orders().find((o) => o.listingId === row.id);
   if (anyPublished && row.priceSats > 0 && !existing) {
-    const status = await bsv.status();
-    const address = status.json?.address ?? null;
+    const wallet = await bsv.utxos();
+    const address = wallet.json?.address ?? null;
     store.addOrder({ listingId: row.id, expectedSats: row.priceSats, address, status: "waiting" });
   }
   return updated;
@@ -136,9 +137,9 @@ const server = https.createServer(
     if (req.method === "GET" && !p.startsWith("/api/")) return serveApp(res, p);
 
     if (req.method === "GET" && p === "/api/state") {
-      const status = await bsv.status();
+      const [status, wallet] = await Promise.all([bsv.status(), bsv.utxos()]);
       return sendJson(res, 200, {
-        address: status.json?.address ?? null,
+        address: wallet.json?.address ?? null,
         walletLocked: status.json?.locked ?? null,
         channels: channelCatalogue(),
         defaultChannels: DEFAULT_CHANNELS,

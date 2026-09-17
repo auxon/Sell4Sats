@@ -28,7 +28,8 @@ export function createBsv(opts = {}) {
     run,
     status: () => run(["status"]),
     utxos: () => run(["utxos"]),
-    twetchPost: (text, origin = "sell4sats") => run(["twetch", "post", text, "--origin", origin]),
+    twetchPost: (text, origin = "sell4sats", mediaPath) =>
+      run(["twetch", "post", text, "--origin", origin, ...(mediaPath ? ["--media", mediaPath] : [])]),
     x402Pay: (url, extra = []) => run(["x402", "pay", url, ...extra]),
   };
 }

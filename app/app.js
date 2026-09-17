@@ -158,13 +158,47 @@ function renderListings() {
   }
 }
 
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result).split(",")[1] ?? "");
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+// Downscale + re-encode so the photo fits in an on-chain OP_RETURN output
+// without paying for camera-sized originals. Targets <= ~180 KB JPEG.
+const PHOTO_STEPS = [
+  [1024, 0.82],
+  [768, 0.78],
+  [640, 0.72],
+  [512, 0.65],
+];
+const PHOTO_TARGET_BYTES = 180_000;
+
+function encodeAt(img, maxDim, quality) {
+  const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+  const w = Math.max(1, Math.round(img.width * scale));
+  const h = Math.max(1, Math.round(img.height * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+  const dataUrl = canvas.toDataURL("image/jpeg", quality);
+  const base64 = dataUrl.split(",")[1] ?? "";
+  return { base64, bytes: Math.floor((base64.length * 3) / 4) };
+}
+
+async function preparePhoto(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => reject(new Error("could not read that image"));
+      i.src = url;
+    });
+    let last = null;
+    for (const [maxDim, quality] of PHOTO_STEPS) {
+      last = encodeAt(img, maxDim, quality);
+      if (last.bytes <= PHOTO_TARGET_BYTES) break;
+    }
+    return { ...last, mime: "image/jpeg", name: file.name };
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 async function pickFile(file) {
@@ -174,11 +208,14 @@ async function pickFile(file) {
     $("compose-status").textContent = "PNG, JPEG, WebP or GIF only";
     return;
   }
-  photo = { base64: await fileToBase64(file), mime: file.type, name: file.name };
+  $("compose-status").className = "status";
+  $("compose-status").textContent = "preparing photo…";
+  photo = await preparePhoto(file);
   const img = $("preview");
-  img.src = `data:${file.type};base64,${photo.base64}`;
+  img.src = `data:${photo.mime};base64,${photo.base64}`;
   img.classList.remove("hidden");
   $("drop-hint").classList.add("hidden");
+  $("compose-status").textContent = `photo ready (${Math.round(photo.bytes / 1024)} KB, embedded on-chain)`;
 }
 
 $("drop").addEventListener("click", () => $("photo").click());
